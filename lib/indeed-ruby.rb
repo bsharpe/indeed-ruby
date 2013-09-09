@@ -70,8 +70,8 @@ module Indeed
     
     class RailsClient < Client
       def initialize(request)
-        @user_ip = request.remote_ip
-        @user_agent = request.REMOTE_USER 
+        @user_ip    = request.remote_ip
+        @user_agent = request.user_agent 
         super(ENV['INDEED_PUBLISHER_ID'])
       end
       
