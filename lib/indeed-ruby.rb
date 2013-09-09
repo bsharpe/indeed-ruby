@@ -67,4 +67,17 @@ module Indeed
         end
 
     end
+    
+    class RailsClient < Client
+      def initialize(request)
+        @user_ip = request.remote_ip
+        @user_agent = request.REMOTE_USER 
+        super(ENV['INDEED_PUBLISHER_ID'])
+      end
+      
+      def search(params)
+        params.merge!({userip: @user_ip, useragent: @user_agent})
+        super(params)
+      end
+    end
 end
