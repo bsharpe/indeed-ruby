@@ -4,6 +4,10 @@ A client library for using the Indeed Jobsearch API
 
 ## Installation
 
+Via bundler, add this to your Gemfile:
+
+  gem "indeed-ruby", github: "bsharpe/indeed-ruby"
+
 Via rubygems.org:
 
     $ gem install indeed-ruby
@@ -21,6 +25,15 @@ client = Indeed::Client.new "YOUR_PUBLISHER_NUMBER"
 
 If you do not have a publisher number, you can receive one by heading to the
 [Indeed Publisher Portal](https://ads.indeed.com/jobroll/xmlfeed).
+
+You can also set the ENV variable INDEED_PUBLISHER_ID to your number using something like heroku's config vars or the [figaro](https://github.com/laserlemon/figaro) gem (which is very handy).
+If you use the ENV variable, you do not need to supply the publisher id with the call to create the client.
+
+```ruby
+require 'indeed-ruby'
+
+client = Indeed::Client.new
+```
 
 
 ### Performing a Job Search
@@ -40,6 +53,16 @@ params = {
 client.search(params)
 ```
 
+In Rails, you can create the client within a controller action using the _request_ object to supply the user_ip and user_agent data.
+
+```ruby
+require 'indeed-ruby'
+
+def index
+  client = Indeed::RailsClient.new(request)
+  results = client.search({l: "austin", q: "ruby"})
+end
+
 ### Retrieving Job Details
 
 ```ruby
@@ -48,7 +71,7 @@ require 'indeed-ruby'
 client = Indeed::Client.new "YOUR_PUBLISHER_NUMBER"
 
 params = {
-    :jobkeys => ["5898e9d8f5c0593f", "c2c41f024581eae5"],
+    jobkeys: ["5898e9d8f5c0593f", "c2c41f024581eae5"],
 }
 
 client.jobs(params)
@@ -77,7 +100,7 @@ Format. Which output format of the API you wish to use. The options are "xml" an
 A boolean. Receive the raw json/xml response from the Indeed API. Use in addition with *format* to specify which response format you would like. Default is `False`
 
 **sort** - 
-Sort by relevance or date. Default is relevance.
+Sort by _relevance_ or _date_. Default is relevance.
 
 **radius** - 
 Distance from search location ("as the crow flies"). Default is 25.
@@ -89,7 +112,7 @@ Start results at this result number, beginning with 0. Default is 0.
 Maximum number of results returned per query. Default is 10
 
 **fromage** - 
-Number of days back to search.
+Number of days back to search.  or cheese.
 
 **highlight** - 
 Setting this value to 1 will bold terms in the snippet that are also present in q. Default is 0.
