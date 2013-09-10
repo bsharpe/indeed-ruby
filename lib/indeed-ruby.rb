@@ -20,8 +20,8 @@ module Indeed
             :required_fields => [:jobkeys],
         }
 
-        def initialize(publisher, version = "2")
-            @publisher = publisher
+        def initialize(publisher = nil, version = "2")
+            @publisher = publisher || ENV['INDEED_PUBLISHER_ID']
             @version = version
         end
 
@@ -72,7 +72,7 @@ module Indeed
       def initialize(request)
         @user_ip    = request.remote_ip
         @user_agent = request.user_agent 
-        super(ENV['INDEED_PUBLISHER_ID'])
+        super
       end
       
       def search(params)
